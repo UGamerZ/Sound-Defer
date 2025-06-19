@@ -4,7 +4,7 @@
 
 **Самый большой проект который я когда-либо проектировал**
 
-Стек: Backend: NestJS + PostgreSQL, Frontend: Next + TS + Tailwind + HeroUI
+Стек: Backend: NestJS + PostgreSQL, Frontend: Next + TS + Tailwind + HeroUI + Mobx + Axios
 
 Пока находится лишь в стадии разработки, бэкэнд сделан полностью, фронт функционал пока не полный.
 
