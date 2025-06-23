@@ -27,6 +27,7 @@ const Footer = observer(() => {
 
   if (currentTrackState.audio) {
     currentTrackState.audio.onloadedmetadata = () => {
+      currentTrackState.setCurrentTime();
       currentTrackState.setDuration();
       setIsLoaded(true);
     };
@@ -34,10 +35,7 @@ const Footer = observer(() => {
       currentTrackState.pause();
       currentTrackState.setCurrentTimeWithValue(currentTrackState.duration);
     };
-    currentTrackState.audio.onloadstart = () => {
-      currentTrackState.setCurrentTimeWithValue(0);
-      setIsLoaded(false);
-    };
+    currentTrackState.audio.onloadstart = () => setIsLoaded(false);
   }
 
   const mins = Math.floor((currentTrackState.duration ?? 0) / 60);
