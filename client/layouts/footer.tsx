@@ -18,17 +18,25 @@ import { currentTrackState } from "@/store/current-track";
 import NextLink from "next/link";
 import { loggedState } from "@/store/is-logged-in";
 import { useRouter } from "next/router";
+import { Skeleton } from "@heroui/skeleton";
 
 const Footer = observer(() => {
   const [liked, setLiked] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
 
   if (currentTrackState.audio) {
-    currentTrackState.audio.onloadedmetadata = () =>
+    currentTrackState.audio.onloadedmetadata = () => {
       currentTrackState.setDuration();
+      setIsLoaded(true);
+    };
     currentTrackState.audio.onended = () => {
       currentTrackState.pause();
       currentTrackState.setCurrentTimeWithValue(currentTrackState.duration);
+    };
+    currentTrackState.audio.onloadstart = () => {
+      currentTrackState.setCurrentTimeWithValue(0);
+      setIsLoaded(false);
     };
   }
 
@@ -115,32 +123,39 @@ const Footer = observer(() => {
               </div>
 
               <div className="flex flex-col mt-1 gap-1">
-                <Slider
-                  isDisabled={!currentTrackState.currentTrack}
-                  aria-label="Music progress"
-                  classNames={{
-                    track: "bg-default-500/30",
-                    thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
-                  }}
-                  value={currentTrackState.currentTime}
-                  color="foreground"
-                  maxValue={Math.floor(currentTrackState.duration)}
-                  onChangeEnd={(value) =>
-                    currentTrackState.setCurrentTimeWithValue(Number(value))
-                  }
-                  size="sm"
-                />
+                <Skeleton isLoaded={isLoaded} className="rounded-full">
+                  <Slider
+                    isDisabled={!currentTrackState.currentTrack}
+                    aria-label="Music progress"
+                    classNames={{
+                      track: "bg-default-500/30",
+                      thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
+                    }}
+                    value={currentTrackState.currentTime}
+                    color="foreground"
+                    maxValue={Math.floor(currentTrackState.duration)}
+                    onChangeEnd={(value) =>
+                      currentTrackState.setCurrentTimeWithValue(Number(value))
+                    }
+                    size="sm"
+                  />
+                </Skeleton>
+
                 <div className="flex justify-between">
-                  <p className="text-xs">
-                    {currentTrackState.currentTrack
-                      ? `${playMins}:${playSecs}`
-                      : "--:--"}
-                  </p>
-                  <p className="text-xs text-foreground/50">
-                    {currentTrackState.currentTrack
-                      ? `${mins}:${secs}`
-                      : "--:--"}
-                  </p>
+                  <Skeleton isLoaded={isLoaded} className="rounded-full">
+                    <p className="text-xs">
+                      {currentTrackState.currentTrack
+                        ? `${playMins}:${playSecs}`
+                        : "--:--"}
+                    </p>
+                  </Skeleton>
+                  <Skeleton isLoaded={isLoaded} className="rounded-full">
+                    <p className="text-xs text-foreground/50">
+                      {currentTrackState.currentTrack
+                        ? `${mins}:${secs}`
+                        : "--:--"}
+                    </p>
+                  </Skeleton>
                 </div>
               </div>
 
