@@ -18,7 +18,6 @@ import { currentTrackState } from "@/store/current-track";
 import NextLink from "next/link";
 import { loggedState } from "@/store/is-logged-in";
 import { useRouter } from "next/router";
-import { Skeleton } from "@heroui/skeleton";
 
 const Footer = observer(() => {
   const [liked, setLiked] = useState(false);
@@ -27,7 +26,6 @@ const Footer = observer(() => {
 
   if (currentTrackState.audio) {
     currentTrackState.audio.onloadedmetadata = () => {
-      currentTrackState.setCurrentTime();
       currentTrackState.setDuration();
       setIsLoaded(true);
     };
@@ -35,7 +33,10 @@ const Footer = observer(() => {
       currentTrackState.pause();
       currentTrackState.setCurrentTimeWithValue(currentTrackState.duration);
     };
-    currentTrackState.audio.onloadstart = () => setIsLoaded(false);
+    currentTrackState.audio.onloadstart = () => {
+      setIsLoaded(false);
+      currentTrackState.setCurrentTimeWithValue(0);
+    };
   }
 
   const mins = Math.floor((currentTrackState.duration ?? 0) / 60);
@@ -121,39 +122,32 @@ const Footer = observer(() => {
               </div>
 
               <div className="flex flex-col mt-1 gap-1">
-                <Skeleton isLoaded={isLoaded} className="rounded-full">
-                  <Slider
-                    isDisabled={!currentTrackState.currentTrack}
-                    aria-label="Music progress"
-                    classNames={{
-                      track: "bg-default-500/30",
-                      thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
-                    }}
-                    value={currentTrackState.currentTime}
-                    color="foreground"
-                    maxValue={Math.floor(currentTrackState.duration)}
-                    onChangeEnd={(value) =>
-                      currentTrackState.setCurrentTimeWithValue(Number(value))
-                    }
-                    size="sm"
-                  />
-                </Skeleton>
-
+                <Slider
+                  isDisabled={!currentTrackState.currentTrack}
+                  aria-label="Music progress"
+                  classNames={{
+                    track: "bg-default-500/30",
+                    thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
+                  }}
+                  value={currentTrackState.currentTime}
+                  color="foreground"
+                  maxValue={Math.floor(currentTrackState.duration)}
+                  onChangeEnd={(value) =>
+                    currentTrackState.setCurrentTimeWithValue(Number(value))
+                  }
+                  size="sm"
+                />
                 <div className="flex justify-between">
-                  <Skeleton isLoaded={isLoaded} className="rounded-full">
-                    <p className="text-xs">
-                      {currentTrackState.currentTrack
-                        ? `${playMins}:${playSecs}`
-                        : "--:--"}
-                    </p>
-                  </Skeleton>
-                  <Skeleton isLoaded={isLoaded} className="rounded-full">
-                    <p className="text-xs text-foreground/50">
-                      {currentTrackState.currentTrack
-                        ? `${mins}:${secs}`
-                        : "--:--"}
-                    </p>
-                  </Skeleton>
+                  <p className="text-xs">
+                    {currentTrackState.currentTrack && isLoaded
+                      ? `${playMins}:${playSecs}`
+                      : "--:--"}
+                  </p>
+                  <p className="text-xs text-foreground/50">
+                    {currentTrackState.currentTrack && isLoaded
+                      ? `${mins}:${secs}`
+                      : "--:--"}
+                  </p>
                 </div>
               </div>
 
