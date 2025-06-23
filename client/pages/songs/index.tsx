@@ -29,7 +29,7 @@ export default function SongsPage() {
   };
 
   const changeTrack = (track: TrackDTO) => {
-    currentTrackState.setTrack(track);
+    currentTrackState.changeTrack(track);
     localStorage.setItem("track", JSON.stringify(track));
   };
 

@@ -15,6 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
     currentTrackState.setTrack(
       JSON.parse(localStorage.getItem("track") || "null") || undefined,
     );
+    currentTrackState.setCurrentTimeWithValue(
+      Number(localStorage.getItem("playTime")),
+    );
   }, []);
 
   return (
