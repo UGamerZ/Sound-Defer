@@ -74,3 +74,16 @@ export const validateLogin = async () => {
     headers: { authorization: `Bearer ${localStorage.getItem("access")}` },
   });
 };
+
+export const createTrack = async () => {
+  await axios.post(
+    "http://192.168.0.113:3000/tracks",
+    document.querySelector("#track-form"),
+    {
+      headers: {
+        "Content-Type": "application/form-data",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    },
+  );
+};
