@@ -53,7 +53,7 @@ const Footer = observer(() => {
   };
 
   return (
-    <footer className="sticky bottom-0">
+    <footer className="sticky bottom-0 z-40">
       <Card
         isBlurred
         className="border-none bg-background/60 dark:bg-default-100/50"
@@ -197,7 +197,7 @@ const Footer = observer(() => {
                   {currentTrackState.isPlaying ? (
                     <PauseCircleIcon size={38} />
                   ) : (
-                    <PlayIcon fill="white" size={32} />
+                    <PlayIcon size={32} />
                   )}
                 </Button>
                 <Button
