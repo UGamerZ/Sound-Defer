@@ -140,12 +140,12 @@ const Footer = observer(() => {
                 <div className="flex justify-between">
                   <p className="text-xs">
                     {currentTrackState.currentTrack && isLoaded
-                      ? `${playMins}:${playSecs}`
+                      ? `${playMins}:${playSecs > 9 ? playSecs : "0" + playSecs}`
                       : "--:--"}
                   </p>
                   <p className="text-xs text-foreground/50">
                     {currentTrackState.currentTrack && isLoaded
-                      ? `${mins}:${secs}`
+                      ? `${mins}:${secs > 9 ? secs : "0" + secs}`
                       : "--:--"}
                   </p>
                 </div>
