@@ -17,8 +17,11 @@ export default function UploadPage() {
   const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
-    audio = new Audio();
     validateLogin().catch(() => window.location.replace("/"));
+    audio = new Audio();
+    audio.onended = () => {
+      setIsPlaying(false);
+    };
   }, []);
 
   useEffect(() => {
